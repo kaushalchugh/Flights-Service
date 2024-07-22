@@ -3,6 +3,7 @@ const { StatusCodes } = require('http-status-codes');
 const { AirplaneRepository } = require('../repositories');
 const AppError = require('../utils/errors/app-error');
 
+
 const airplaneRepository = new AirplaneRepository();
 
 async function createAirplane(data) {
@@ -36,7 +37,7 @@ async function getAirplane(id) {
         return airplane;
     } catch(error) {
         if(error.statusCode == StatusCodes.NOT_FOUND) {
-            throw new AppError("The airplane you requested is not present", error.statusCode)
+            throw new AppError('The airplane you requested is not present', error.statusCode);
         }
         throw new AppError('Cannot fetch data of the airplane', StatusCodes.INTERNAL_SERVER_ERROR);
     }
@@ -48,9 +49,21 @@ async function destroyAirplane(id) {
         return response;
     } catch(error) {
         if(error.statusCode == StatusCodes.NOT_FOUND) {
-            throw new AppError("The airplane you requested to delete is not present", error.statusCode)
+            throw new AppError('The airplane you requested to delete is not present', error.statusCode);
         }
         throw new AppError('Cannot fetch data of all the airplanes', StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+}
+
+async function updateAirplane(id, data) {
+    try{
+        const airplane = await airplaneRepository.update(id, data);
+        return airplane;
+    } catch(error) {
+        if(error.statusCode == StatusCodes.NOT_FOUND) {
+            throw new AppError('The airplane you requested to update is not present', error.statusCode);
+        }
+        throw new AppError('Not able to fetch data for updation', StatusCodes.INTERNAL_SERVER_ERROR);
     }
 }
 
@@ -58,5 +71,6 @@ module.exports = {
     createAirplane,
     getAirplanes,
     getAirplane,
-    destroyAirplane
+    destroyAirplane,
+    updateAirplane
 }

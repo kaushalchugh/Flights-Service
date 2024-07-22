@@ -21,7 +21,6 @@ async function createCity(data) {
     }
 }
 
-
 module.exports = {
     createCity
 }
