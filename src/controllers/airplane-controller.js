@@ -83,6 +83,10 @@ async function destroyAirplane(req, res) {
     }
 }
 
+/**
+ * PATCH : /airplanes/:id
+ * req-body {modelNumber: 'airbus320', capacity: 200}
+ */
 async function updateAirplane(req, res) {
     try{
         const airplane = await AirplaneService.updateAirplane(req.params.id, {

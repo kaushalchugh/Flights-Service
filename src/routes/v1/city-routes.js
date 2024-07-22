@@ -5,10 +5,16 @@ const { CityMiddlewares } = require('../../middlewares');
 
 const router = express.Router();
 
-// /api/v1/airplanes POST
+// /api/v1/cities POST
 router.post('/',
         CityMiddlewares.validateCreateRequest,
         CityController.createCity);
+
+router.get('/',
+        CityController.getCities);
+
+router.get('/:id',
+        CityController.getCity);
 
 
 module.exports = router;
