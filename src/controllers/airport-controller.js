@@ -92,12 +92,21 @@ async function destroyAirport(req, res) {
  */
 async function updateAirport(req, res) {
     try{
-        const airport = await AirportService.updateAirport(req.params.id, {
-            name: req.body.modelNumber,
-            cityId: req.body.cityId,
-            code: req.body.code,
-            address: req.body.address
-        });
+        const bodyReq = req.body;
+        const bodyData = {}
+        if(bodyReq.name){
+            bodyData.name = bodyReq.name;
+        }
+        if(bodyReq.code){
+            bodyData.code = bodyReq.code;
+        }
+        if(bodyReq.address){
+            bodyData.address = bodyReq.address;
+        }
+        if(bodyReq.cityId){
+            bodyData.cityId = bodyReq.cityId;
+        }
+        const airport = await AirportService.updateAirport(req.params.id, bodyData);
         SuccessResponse.data = airport;
         return res
                 .status(StatusCodes.OK)

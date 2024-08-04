@@ -89,10 +89,15 @@ async function destroyAirplane(req, res) {
  */
 async function updateAirplane(req, res) {
     try{
-        const airplane = await AirplaneService.updateAirplane(req.params.id, {
-            modelNumber: req.body.modelNumber,
-            capacity: req.body.capacity
-        });
+        const bodyReq = req.body;
+        const bodyData = {}
+        if(bodyReq.modelNumber){
+            bodyData.modelNumber = bodyReq.modelNumber;
+        }
+        if(bodyReq.capacity){
+            bodyData.capacity = bodyReq.capacity;
+        }
+        const airplane = await AirplaneService.updateAirplane(req.params.id, bodyData);    
         SuccessResponse.data = airplane;
         return res
                 .status(StatusCodes.OK)

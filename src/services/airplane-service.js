@@ -60,10 +60,17 @@ async function updateAirplane(id, data) {
         const airplane = await airplaneRepository.update(id, data);
         return airplane;
     } catch(error) {
-        if(error.statusCode == StatusCodes.NOT_FOUND) {
+        if(error.name == 'SequelizeValidationError') {
+            let explanation = [];
+            error.errors.forEach((err) => {
+                explanation.push(err.message);
+            });
+            throw new AppError(explanation, StatusCodes.BAD_REQUEST);
+        }
+        else if(error.statusCode == StatusCodes.NOT_FOUND) {
             throw new AppError('The airplane you requested to update is not present', error.statusCode);
         }
-        throw new AppError('Not able to fetch data for updation', StatusCodes.INTERNAL_SERVER_ERROR);
+        throw new AppError('Cannot update the requested airplane', StatusCodes.INTERNAL_SERVER_ERROR);
     }
 }
 

@@ -60,7 +60,17 @@ async function updateAirport(id, data) {
         const airport = await airportRepository.update(id, data);
         return airport;
     } catch(error) {
-        if(error.statusCode == StatusCodes.NOT_FOUND) {
+        if(error.name == 'SequelizeValidationError') {
+            let explanation = [];
+            error.errors.forEach((err) => {
+                explanation.push(err.message);
+            });
+            throw new AppError(explanation, StatusCodes.BAD_REQUEST);
+        }
+        else if(error.name == "SequelizeForeignKeyConstraintError"){
+            throw new AppError(error.message, StatusCodes.BAD_REQUEST);
+        }
+        else if(error.statusCode == StatusCodes.NOT_FOUND) {
             throw new AppError('The airport you requested to update is not present', error.statusCode);
         }
         throw new AppError('Not able to fetch data for updation', StatusCodes.INTERNAL_SERVER_ERROR);
