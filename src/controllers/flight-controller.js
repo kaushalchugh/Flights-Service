@@ -101,5 +101,5 @@ module.exports = {
     createFlight,
     getAllFlights,
     getFlight,
-
+    updateSeats
 }
