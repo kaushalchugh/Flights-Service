@@ -51,9 +51,9 @@ class FlightRepository extends CrudRepository {
     }
 
     async updateRemainingSeats(flightId, seats, dec = true) {
-        await db.sequelize.query(`SELECT * from Flights WHERE Flights.id = ${flightId} FOR UPDATE;`);
+        await db.sequelize.query(addRowLockOnFlights(flightId));
         const flight = await Flight.findByPk(flightId);
-        if(parseInt(dec)) {
+        if(+dec) {
             await flight.decrement('totalSeats', {by: seats});
         } else {
             await flight.increment('totalSeats', {by: seats});
